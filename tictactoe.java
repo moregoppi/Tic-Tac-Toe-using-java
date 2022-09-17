@@ -112,7 +112,7 @@ public class tictactoe {
             System.out.println("Enter your placement from 1 to 9");
             //here we are taking input from user to place the value
             int playerPos = sc.nextInt();
-            while(playerpositons.contains(playerPos) || cpupositons.contains(playerpositons)){
+            while(playerpositons.contains(playerPos) || cpupositons.contains(playerPos)){
                 System.out.println("Positon taken! Enter a correct position");
                 playerPos =sc.nextInt();
             }
