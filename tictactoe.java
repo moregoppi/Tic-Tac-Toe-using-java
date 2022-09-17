@@ -4,6 +4,10 @@ import java.util.random.*;
 
 import javax.swing.text.Position;
 public class tictactoe {
+
+    static ArrayList<Integer> playerpositons=new ArrayList<Integer>();
+    static ArrayList<Integer> cpupositons=new ArrayList<Integer>();
+
     //this function is for printing gameboard
     public static void printBoard(char board[][]){
         for(int i=0;i<board.length;i++){
@@ -19,8 +23,10 @@ public class tictactoe {
         char symbol=' ';
         if(user.equals("player")){
             symbol='x';
+            playerpositons.add(position);
         }else if(user.equals("cpu")){
             symbol='o';
+            cpupositons.add(position);
         }
 
         switch(position){
@@ -66,6 +72,27 @@ public class tictactoe {
 
         List cross1=Arrays.asList(1,5,9);
         List cross2=Arrays.asList(7,5,3);
+
+        List<List> winning = new ArrayList<List>();
+        winning.add(topRow);
+        winning.add(middleRow);
+        winning.add(bottomRow);
+        winning.add(firstCol);
+        winning.add(secondCol);
+        winning.add(thirdCol);
+        winning.add(cross1);
+        winning.add(cross2);
+
+        for(List l : winning){
+            if(playerpositons.containsAll(l)){
+                return "Congratualtion you won!";
+            }else if(cpupositons.containsAll(l)){
+                return "CPU wins! Sorry :(";
+            }else if(playerpositons.size() + cpupositons.size() == 9){
+                return "No one wins its tie";
+            }
+        }
+
         return "";
     }
     public static void main(String[] args) {
@@ -75,24 +102,45 @@ public class tictactoe {
                         {'-','+','-','+','-'},
                         {' ','|',' ','|',' '}};
         printBoard(board);
-        Scanner sc=new Scanner(System.in);
 
         
 
         //here we are makign a loop to take input from user again
         while(true){
+            Scanner sc = new Scanner(System.in);
+
             System.out.println("Enter your placement from 1 to 9");
             //here we are taking input from user to place the value
             int playerPos = sc.nextInt();
+            while(playerpositons.contains(playerPos) || cpupositons.contains(playerpositons)){
+                System.out.println("Positon taken! Enter a correct position");
+                playerPos =sc.nextInt();
+            }
             placePiece(board, playerPos, "player");
-
+            String result = checkWinner();
+            if(result.length() > 0){
+                System.out.println(result);
+                break;
+            }
             //here we use random library to take input from cpu a random number
             Random random=new Random();
             int cpuPos = random.nextInt(9) + 1;
+            
+            while(playerpositons.contains(cpuPos) || cpupositons.contains(cpuPos)){
+                cpuPos =random.nextInt(9) + 1;
+            }
             placePiece(board, cpuPos, "cpu");
 
             //here we are print board
             printBoard(board);
+            
+            result = checkWinner();
+            if(result.length() > 0){
+                System.out.println(result);
+                break;
+            }
+            
+            System.out.println(result);
         }
     }
 }
